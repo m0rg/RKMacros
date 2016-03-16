@@ -1,0 +1,33 @@
+
+Sub Main
+	
+	/declare i int local 0
+	/declare j int local 0
+
+	/declare spellsToCast int local 3
+	
+	:loop
+	
+	/for i 1 to ${spellsToCast}
+		/if (${i} == ${spellsToCast}) {
+			/varset j 1
+		} else {
+			/varcalc j ${i} + 1
+		}
+	
+		/cast ${i}
+		/delay 10s ${Me.SpellReady[${j}]}
+		/destroy
+	/next i
+
+	/if (${Me.Pet.ID}) /pet leave
+	/goto :loop
+	
+|	/twist 1 2 3 4
+
+
+|
+|		/delay 2s
+
+/return
+

@@ -1,0 +1,35 @@
+Sub Main
+| *** VARIABLE DECLARATIONS
+
+	/declare bagNumber int local
+	/declare itemNumber int local
+
+| *** INITIALIZATION
+	/echo Starting Inventory Sort Macro
+
+	/for bagNumber 1 to 10
+		/echo sorting bag ${bagNumber}
+		/if (${Bool[${Me.Inventory[pack${bagNumber}]}]}) {
+			/if (${Bool[${Me.Inventory[pack${bagNumber}].Items}]}) {
+				/for itemNumber 1 to ${Me.Inventory[pack${bagNumber}].Container}
+					/if (${Bool[${Me.Inventory[pack${bagNumber}].Item[${itemNumber}]}]}) {					
+						/echo sorting item number ${itemNumber} of ${Me.Inventory[pack${bagNumber}].Container}
+						/if (${Bool[${Me.Inventory[pack${bagNumber}].Item[${itemNumber}].Spell}]}) {
+							/nomodkey /shiftkey /itemnotify in pack${bagNumber} ${itemNumber} leftmouseheld
+							/delay 2
+							/click right
+							/delay 2
+							/click right
+						}
+						/delay 2
+						/nomodkey /shiftkey /itemnotify in pack${bagNumber} ${itemNumber} leftmouseup
+						/delay 2s ${Cursor.ID}
+						/autoinv
+						/delay 2s !${Cursor.ID}
+					}
+				/next itemNumber
+			}
+		}
+	/next bagNumber
+
+/return
