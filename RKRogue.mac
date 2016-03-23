@@ -19,14 +19,34 @@ Sub Main
 	/varset SingleTargetMezLevelCap 105
 	/varset StickFlags behind
 		
-	/varset TargetHpEngagePercentage 98
+	/varset MaxTargetDistance 5000
+		
+	/varset TargetHpEngagePercentage 99
 	/varset UpperAggroThreshold 99
+	
+	/call AddToArray "CombatAbilities" "Backstab"
+	/call AddToArray "CombatAbilities" "Disarm"
+	/call AddToArray "CombatAbilities" "Intimidation"
+	
+	/call AddToArray "CombatDiscs" "Arcwork Discipline Rk. II"
+	/call AddToArray "CombatDiscs" "Wide-Eyed Mark Rk. II"
+	/call AddToArray "CombatDiscs" "Pinpoint Liabilities"	
+	/call AddToArray "CombatDiscs" "Reefcrawler Blade Rk. II"
+	/call AddToArray "CombatDiscs" "Assault"
+	/call AddToArray "CombatDiscs" "Hack Rk. II"
+	/call AddToArray "CombatDiscs" "Kinesthetics Discipline"	
+	/call AddToArray "CombatDiscs" "Delusion"
+	/call AddToArray "CombatDiscs" "Jugular Hack Rk. II"
+	/call AddToArray "CombatDiscs" "Surprise Attack Rk. II"	
+	/call AddToArray "CombatDiscs" "Fatal Aim Discipline"
 		
 	/call AddToArray "InvisModeSubs" "HideAndSneak"
 	/call AddToArray "NonCombatSubs" "RogueNonCombatSubs"
 	/call AddToArray "DefensiveActionSubs" "RogueDefensives"		
 	/call AddToArray "CombatActionSubs" "RogueCombat"
 	/call AddToArray "BurnCombatActionSubs" "RogueBurn"
+
+	/call AddToArray "CombatDiscs" "Hidden Blade Rk. II"
 	
 	/echo Done initializing Rogue macro!
 
@@ -56,6 +76,8 @@ Sub RogueNonCombatSubs
 	/if (!${Me.Invis}) {
 		/doability "Hide"
 		/doability "Sneak"
+	} else {
+		|/call RKDisc "Daggerlunge"
 	}
 	
 	/if (${Me.PctEndurance} < 25) {
@@ -68,29 +90,24 @@ Sub RogueNonCombatSubs
 		}
 	}
 
-	/if (!${Target.ID} || !${Target.Type.Equal[NPC]}) /return FALSE
+	|/if (!${Target.ID} || !${Target.Type.Equal[NPC]}) /return FALSE
 	
-	/call RKDisc "Daggerlunge"
 /return FALSE
 
 Sub RogueBurn
-	/call RKDisc "Frenzied Stabbing"
+	/call RKDisc "Frenzied Stabbing Discipline"
 	/call RKDisc "Eradicator's Discipline"
 	/call RKAACast "Fundament: Third Spire of the Rake"
 
 	/call RKAACast "Envenomed Blades"
 	/call RKAACast "Rogue's Fury"
-	
-	/call RKDisc "Twisted Chance Discipline"
-	
+
+	/call RKDisc "Shrouding Speed Discipline"
 	/call RKDisc "Weapon Covenant"
-	
 /return FALSE
 
 Sub RogueCombat
-
 	/doability "Backstab"
-
 	/declare i int local 0
 	/declare poisonFound bool local FALSE
 	/for i 1 to 42
@@ -100,44 +117,28 @@ Sub RogueCombat
 	/next i
 
 	/if (!${poisonFound}) /cast item "Consigned Bite of the Shissar XVIII"
-	
 	/if (!${Me.Buff[Bite of the Shissar].ID} && !${Bool[${Me.Hasted}]}) /cast item "Distillate of Alacrity X"
-
 	/if (${Target.PctHPs} > 50) /call RKAACast "Absorbing Agent" ${CurrentTargetId}
-	
-	
-	
-	/call RKDisc "Jugular Hack Rk. II"
-	/call RKDisc "${If[${Me.Invis},Daggerstrike,Onslaught]}"
-	/call RKDisc "Surprise Attack Rk. II"	
 
+	/call RKDisc "${If[${Me.Invis},Barrage Rk. II,Daggergash]}"
+	
 	/if (!${Me.Song[Thief's Eyes].ID}) /call RKDisc "Thief's Eyes"
 	
-	/call RKDisc "Fatal Aim Discipline"
-	
-	/if (${Me.XTarget} > 2) {
+	/if (${Me.XTarget} > 2 && ${Target.PctHPs} < 80) {
 		/call RKAACast "Rake's Rampage" ${CurrentTargetId}
 		/if (${Macro.Return}) /i say AE Burn!		
 		/call RKAACast "Rogue's Fury" ${CurrentTargetId}
+		/call RKDisc "Frenzied Stabbing Discipline"
 	}
 	
 	
 	/doability "Disarm"
 	/doability "Intimidation"
 	
-	/call RKDisc "Wide-Eyed Mark Rk. II"
-
 	/call RKAACast "Dirty Fighting" ${CurrentTargetId}
 	/call RKAACast "Ligament Slice" ${CurrentTargetId}
 	/call RKAACast "Twisted Shank" ${CurrentTargetId}
 
-	/call RKDisc "Pinpoint Liabilities"	
-	/call RKDisc "Reefcrawler Blade Rk. II"
-	/call RKDisc "Assault"
-	/call RKDisc "Hack Rk. II"
-	/call RKDisc "Kinesthetics Discipline"	
-	/call RKDisc "Delusion"
-	
 	/if (${Target.PctHPs} < 30) /return FALSE
 	
 	/call RKItemSlotCast chest

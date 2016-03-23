@@ -31,7 +31,7 @@ Sub Main
 	
 	/varset PetSpellName Olesira's Faithful Rk. II
 	
-	/varset EmergencyHealSpell Reckless Regeneration
+	/varset EmergencyHealSpell Reckless Regeneration Rk. II
 	/varset EmergencyHealThreshold 90
 	
 	/varset HealSpell Krasir's Mending Rk. II
@@ -42,7 +42,7 @@ Sub Main
 
 	/call AddToArray "InvisModeSubs" "GroupInvis"
 	
-	/varset MercBurnThreshold 90
+	/varset MercBurnThreshold 100
 	
 	/varset TankHoTThreshold 95
 	/varset TankHealThreshold 85
@@ -52,17 +52,20 @@ Sub Main
 	
 	/varset GroupHealThreshold 95
 	/varset EmergencyGroupHealThreshold 80
+	
+	/varset TargetHpEngagePercentage 100
+	/varset UpperAggroThreshold 100
 
 	/varset InCombatStickToCommander TRUE
 
-	/call AddToArray "DetrimentalSpells" "Glacial Gift"
+	|/call AddToArray "DetrimentalSpells" "Glacial Gift Rk. II"
 	/call AddToArray "DetrimentalSpells" "Serpentil's Venom Rk. II"
 	/call AddToArray "DetrimentalSpells" "Sephry's Malady"
 	/call AddToArray "DetrimentalSpells" "Reefmaw's Bite Rk. II"
 	
 	/call AddToArray "CombatSelfBuffs" "Talisman of the Leopard Rk. II"
 	/call AddToArray "CombatSelfBuffs" "Pack of Olesira"
-	/call AddToArray "CombatSelfBuffs" "Shear of Renewal"
+	/call AddToArray "CombatSelfBuffs" "Shear of Renewal Rk. II"
 	
 	/call AddToArray "DefensiveActionSubs" "Defensives"		
 	/call AddToArray "PreTargetAcquisitionCombatActionSubs" "CheckWolf"
@@ -70,11 +73,9 @@ Sub Main
 	/call AddToArray "NonCombatSubs" "ShamanNonCombatSubs"
 	/call AddToArray "NonCombatSubs" "DoCannibalization"
 	/call AddToArray "NonCombatSubs" "CheckCheetah"		
-
 	
 	/call AddToArray "BurnCombatActionSubs" "ShamanBurn"
 
-	
 	/call AddToArray "CombatTankBuffs" "Sluggishness Rk. II"
 
 	/call AddToArray "CombatSelfBuffs" "Talisman of the Faithful Rk. II"
@@ -111,8 +112,6 @@ Sub PriorityCombatActions
 	/if (${Spawn[id ${TankId}].Distance} > 100) /call RKAACast "Spirit Leap" ${TankId}
 	/call RKItemCast "Circle of Power I Effect" "Willowcrush's Branch"
 	
-	/if (${Me.XTarget} > 1) /call RKAACast "Tigir's Insect Swarm" ${CurrentTargetId}
-	
 /return FALSE
 
 Sub ShamanCombatActions
@@ -123,7 +122,12 @@ Sub ShamanCombatActions
 	
 	/if (${Me.XTarget} > 1 && ${Target.Type.Equal[NPC]} && ${Target.PctHPs} < 99) {
 		/call RKAACast "Wind of Malosinete" ${CurrentTargetId}
-		/if (${Me.AltAbilityReady[Wind of Malosinete]}) /return TRUE
+		|/if (${Me.AltAbilityReady[Wind of Malosinete]}) /return TRUE
+	}
+
+	/if (${Me.XTarget} > 1 && ${Me.AltAbilityReady[Tigir's Insect Swarm]}) {
+		/call RKAACast "Tigir's Insect Swarm" ${CurrentTargetId}
+		/return TRUE
 	}
 	
 	/if (${Me.SpellReady[Ferocious Growth Rk. II]}) {
@@ -133,7 +137,6 @@ Sub ShamanCombatActions
 
 	/if (!${Bool[${Target.Malod}]}) {
 		/call RKAACast "Malosinete" ${CurrentTargetId}
-		/return TRUE
 	}
 	
 	/call RKAACast "Spirit Call" ${CurrentTargetId}
@@ -166,6 +169,7 @@ Sub Defensives
 /return FALSE
 
 Sub ShamanBurn
+	/call RKAACast "Fleeting Spirit" ${CurrentTargetId}
 	/call RKAACast "Crippling Spirit" ${CurrentTargetId}
 	/call RKAACast "Call of the Ancients"
 	/call RKAACast "Focus of Arcanum"

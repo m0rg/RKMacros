@@ -79,7 +79,7 @@ Sub ExecuteBurnPaladinCombatActions
 Sub ExecutePriorityCombatActions
 	/if (!${Target.ID}) /return FALSE
 	/if (${BOTMode} != 5) /face fast nolook
-	/if (!${Me.Buff[Yaulp].ID} && !${Me.Sitting}) /call RKAACast "Yaulp (Lesser)"
+	/if (!${Me.Buff[Yaulp].ID} && !${Me.Sitting} && !${Me.Moving}) /call RKAACast "Yaulp (Lesser)"
 	
 	/if (${CurrentGroupHealthPercentage} < 95 && ${Me.GemTimer[${Me.Gem[Splash of Cleansing]}]} == 0) {
 		/echo CurrentGroupHealthPercentage = ${CurrentGroupHealthPercentage} casting Splash

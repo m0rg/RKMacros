@@ -24,14 +24,14 @@ Sub Main
 	/varset SpellMemSlot 10
 
 	/varset HealSpell Panavida Rk. II
-	/varset TankHealThreshold 50
-	/varset SingleTargetHealThreshold 50
+	/varset TankHealThreshold 60
+	/varset SingleTargetHealThreshold 60
 	
-	/varset EmergencyHealSpell Vivification
-	/varset EmergencyHealThreshold 90
+	/varset EmergencyHealSpell Resurgence Rk. II
+	/varset EmergencyHealThreshold 50
 	
 	/varset GroupHeal Lunassuage
-	/varset GroupHealThreshold 80
+	/varset GroupHealThreshold 70
 	
 	/varset EmergencyGroupHeal Survival of the Fortuitous
 	/varset EmergencyGroupHealThreshold 0
@@ -39,44 +39,27 @@ Sub Main
 	/call AddToArray "InvisModeSubs" "CastGroupInvis"
 	/call AddToArray "NonCombatSubs" "DruidNonCombat"
 	/call AddToArray "PreTargetAcquisitionCombatActionSubs" "CheckCheetah"
+	/call AddToArray "DefensiveActionSubs" "ExecuteDefensiveActions"
 	/call AddToArray "BurnCombatActionSubs" "DruidBurnActions"
 	
-	/call AddToArray "CombatTankBuffs" "Husk of the Reptile"
-	/call AddToArray "CombatTankBuffs" "Daggerthorn Rk. II"
+	/call AddToArray "CombatTankBuffs" "Pellicle of the Reptile Rk. II"
+	|/call AddToArray "CombatTankBuffs" "Daggerthorn Rk. II"
 
-	/call AddToArray "DetrimentalSpells" "Anabatic Roar Rk. II"	
-	
-	/call AddToArray "DetrimentalSpells" "Windborne Chill"	
-	/call AddToArray "DetrimentalSpells" "Plummeting Hail Rk. II"
-	/call AddToArray "DetrimentalSpells" "Heliacal Pyre"
-	
-	/call AddToArray "DetrimentalSpells" "Sunbeam Blessing"	
+	/call AddToArray "DetrimentalSpells" "Nature's Fiery Wrath Rk. II"	
+	/call AddToArray "DetrimentalSpells" "Sporali Storm Rk. II"		
+	/call AddToArray "DetrimentalSpells" "Remote Moonflame Rk. II"		
+	/call AddToArray "DetrimentalSpells" "Summer Sunfire Rk. II"	
+	/call AddToArray "DetrimentalSpells" "Argent Thornmaw Rk. II"
+	/call AddToArray "DetrimentalSpells" "Sunfire Blessing Rk. II"	
+
 	/call AddToArray "DetrimentalSpells" "Typhoon of the Stormborn"
-	
 	/call AddToArray "DetrimentalSpells" "Lustrous Frost"
 	/call AddToArray "DetrimentalSpells" "Nature's Withering Wrath"
-
-	/call AddToArray "DetrimentalSpells" "Remote Sunfire"
 	
-	/call AddToArray "DetrimentalSpells" "Shear of the Stormborn Rk. II"
-	/call AddToArray "DetrimentalSpells" "Nature's Incinerating Wrath Rk. II"		
-
-	/call AddToArray "CombatSelfBuffs" "Talisman of the Steadfast"
-	/call AddToArray "CombatSelfBuffs" "Legacy of Spikethistles"	
-	/call AddToArray "CombatSelfBuffs" "Spirit of the Relentless Rk. II"
-	/call AddToArray "CombatSelfBuffs" "Mask of the Bosquetender"
-	/call AddToArray "CombatSelfBuffs" "Arboreal Absolution Rk. II"
-	/call AddToArray "CombatSelfBuffs" "Spikethistle Coat"
-	
-	/call AddToArray "DefensiveActionSubs" "ExecuteDefensiveActions"
-	/call AddToArray "NonCombatSubs" "DruidNonCombat"
-	
-	/varset TankHoTThreshold 98
-	/varset TankHealThreshold 95
-	/varset SingleTargetHoTThreshold 90
-	/varset SingleTargetHealThreshold 90
-	/varset GroupHealThreshold 89
-	/varset EmergencyGroupHealThreshold 90
+	/call AddToArray "NonCombatSelfBuffs" "Talisman of the Faithful Rk. II"
+	/call AddToArray "NonCombatSelfBuffs" "Legacy of Daggerspurs Rk. II"	
+	/call AddToArray "NonCombatSelfBuffs" "Mask of the Bosquetender"
+	/call AddToArray "NonCombatSelfBuffs" "Spikethistle Coat"
 	
 | *** INITIALIZATION
 	/echo Starting Box Commander - Druid Macro
@@ -88,11 +71,7 @@ Sub Main
 
 Sub DruidNonCombat
 	/if (!${Me.Buff[Flight of Eagles].ID}) /call RKAACast "Flight of Eagles"
-	
-	/if (!${Me.Aura.Equal[Wildspark Aura]}) {
-		/call RKBuff "Wildspark Aura" ${CurrentTargetId}
-		|/if (${Macro.Return}) /return TRUE
-	}
+	/if (!${Me.Aura.Equal[Wildspark Aura]}) /call RKBuff "Wildspark Aura" ${CurrentTargetId}
 /return FALSE
 
 Sub DruidCombat

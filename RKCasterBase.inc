@@ -2,9 +2,15 @@ Sub Init_RKCasterBase
 	/varset EarlyEscapePauseDuration 3
 	/declare LowManaLevel int outer 10
 	/declare SpellMemSlot int outer 9
+	
+	/call AddToArray "CombatActionSubs" "ExecuteCasterCombatActions"
+	/call AddToArray "PreTargetAcquisitionCombatActionSubs" "ExecuteCombatBuffs"
+	/call AddToArray "NonCombatSubs" "ExecuteNonCombatBuffs"
+	/call AddToArray "NonCombatSubs" "ClearAppliedDebuffs"
+	
 	/call GetNoCooldownSpellGem
 	/declare NoCooldownSpellGem int outer ${Macro.Return}
-	
+		
 	/declare OffGCDCombatActionSubs[${DynamicArraySize}] string outer
 
 	/declare DetrimentalSpellDebuffNames[${DynamicArraySize}] string outer
@@ -33,12 +39,6 @@ Sub Init_RKCasterBase
 	/declare AppliedDebuffs[${DynamicArraySize}] string outer
 
 	/declare GiftProcName string outer Gift of Ascendant Exquisite Radiant Mana
-
-	/call AddToArray "CombatActionSubs" "ExecuteCasterCombatActions"
-	/call AddToArray "PreTargetAcquisitionCombatActionSubs" "ExecuteCombatBuffs"
-	
-	/call AddToArray "NonCombatSubs" "ExecuteNonCombatBuffs"
-	/call AddToArray "NonCombatSubs" "ClearAppliedDebuffs"
 
 	/echo Done initializing caster base!
 /return
@@ -182,8 +182,8 @@ Sub ExecuteCombatBuffs
 /return FALSE
 
 Sub ExecuteNonCombatBuffs
-	/if (${Me.Moving} && !${Me.Class.Name.Equal[Bard]}) /return FALSE
 	/if (${DebugMode}) /echo ExecuteNonCombatBuffs
+	/if (${Me.Moving} && !${Me.Class.Name.Equal[Bard]}) /return FALSE
 	/if (${Me.Casting.ID}) /return FALSE
 	/call ExecuteBuffsWithUniqueNames "NonCombatSelfBuffs"
 	/if (${Macro.Return}) /return TRUE
@@ -198,18 +198,20 @@ Sub ExecuteBuffsWithUniqueNames(string arrayName)
 	/declare spellName string local
 	/declare buffName string local	
 
-	/for i 1 to ${${NonCombatSelfBuffs}.Size}
-		/varset spellName ${${NonCombatSelfBuffs}[${i}]}
-		/if (!${Bool[${spellName}]}) /next i
-		/varset buffName ${${NonCombatSelfBuffs}Names[${i}]}
-		/if (!${Bool[${buffName}]}) /varset buffName ${spellName}
+	/for i 1 to ${${arrayName}.Size}
+		/varset spellName ${${arrayName}[${i}]}
+		/if (${Bool[${spellName}]}) {
+			/varset buffName ${${arrayName}Names[${i}]}
+			/if (!${Bool[${buffName}]}) /varset buffName ${spellName}
 
-		/if (${Bool[${AltAbility[${spellName}]}]}) {
-			/call RKAACast "${spellName}" ${CurrentTargetId}
-		} else {
-			/if (${DebugMode}) /echo trying to cast ${spellName} for buff: ${buffName}
-			/call RKBuffWithUniqueName "${spellName}" "${buffName}" ${Me.ID}
-			/if (${Macro.Return}) /return TRUE
+			/if (${Bool[${AltAbility[${spellName}]}]}) {
+				/if (${DebugMode}) /echo trying to cast AA ${spellName}
+				/call RKAACast "${spellName}" ${Me.ID}
+			} else {
+				/if (${DebugMode}) /echo trying to cast ${spellName} for buff: ${buffName}
+				/call RKBuffWithUniqueName "${spellName}" "${buffName}" ${Me.ID}
+				/if (${Macro.Return}) /return TRUE
+			}
 		}
 	/next i
 /return FALSE
@@ -224,7 +226,7 @@ Sub ExecuteSelfBuffs(string buffArray)
 		/if (${Me.GemTimer[${${buffArray}[${i}]}]} == 0) {
 			/if (!${Bool[${${buffArray}[${i}]}]}) /return FALSE
 			/if (${Bool[${${buffArray}Names[${i}]}]}) {
-				/call RKBuffWithUniqueName "${${buffArray}[${i}]}" "${${buffArray}Names[${i}]}"
+				/call RKBuffWithUniqueName "${${buffArray}[${i}]}" "${${buffArray}Names[${i}]}" ${Me.ID}
 			} else {
 				/call RKBuff "${${buffArray}[${i}]}" ${Me.ID}
 			}

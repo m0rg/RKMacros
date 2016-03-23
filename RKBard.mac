@@ -15,16 +15,17 @@ Sub Main
 	
 | *** VARIABLE DECLARATIONS
 
-	/varset MaxTargetDistance 150
 	/varset StickDistance 7
 	/varset StickFlags behind	
 	/varset SitBetweenCombat FALSE
 
 	/declare OverhasteAura bool outer TRUE
-	
+
+	/varset CCMode FALSE
 	/varset MultipleTargetMez Wave of Quietude
-	/varset SingleTargetMez Lullaby of Silisia Rk. II
-	/varset SingleTargetMezLevelCap 105
+	/varset SingleTargetMez Slumber of Silisia Rk. II
+	/varset SingleTargetMezLevelCap 108
+
 	/varset CharmMode FALSE
 	/varset CharmSpell "Voice of Motlak"
 	/varset CharmSpellLevelCap 98
@@ -121,6 +122,11 @@ Sub CheckAESlow
 Sub BardCombat
 	|/call CheckAESlow
 	/call RKItemSlotCast chest
+	
+	/if (${Me.GemTimer[${Me.Gem[Silisia's Lively Crescendo Rk. II]}]} == 0) {
+		/call RKCast "Silisia's Lively Crescendo Rk. II" ${CurrentTargetId}
+		/return TRUE
+	}
 	
 	/call RKAACast "Boastful Bellow" ${CurrentTargetId}
 	/call RKAACast "Selo's Kick" ${CurrentTargetId}

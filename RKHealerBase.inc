@@ -84,8 +84,7 @@ Sub CheckSingleTargetHealth(int targetId, int healThreshold, int HoTThreshold, s
 	/if (${Bool[${healSpell}]}) {
 		/if (${Spawn[${targetId}].PctHPs} < ${healThreshold}) {
 			/varset needToHeal TRUE
-			|/if (${DebugMode}) 
-			/echo need to heal ${targetId} ${Spawn[${targetId}].PctHPs} < ${healThreshold}
+			/if (${DebugMode}) /echo need to heal ${targetId} ${Spawn[${targetId}].PctHPs} < ${healThreshold}
 			/call RKCast "${healSpell}" ${targetId}
 		}
 	}

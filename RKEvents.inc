@@ -16,6 +16,7 @@
 #Event XP3 "#*#You have slain#*#"
 #Event GotGroupInvite "#*#invites you to join a group.#*#"
 #Event TaskGranted "#*#you have been assigned the task#*#"
+#Event TaskProgress "#*#' has been updated.#*#"
 #Event LanguageSetToErudian "#*#Language set to Erudian#*#"
 #Event LanguageSetToErudian "#*#Current Language is Erudian#*#"
 #Event LanguageSetToElvish "#*#Current Language is Elvish#*#"
@@ -310,4 +311,8 @@ Sub Event_Camping
 Sub Event_ReceivedTell(eventText, player, language, message)
 	/if (${Me.Pet.ID} && ${Me.Pet.Name.Equal[${player}]}) /return FALSE
 	/i say tell from ${player} in ${language}: ${message}
+/return FALSE
+
+Sub Event_TaskProgress
+	/i say got quest update.
 /return FALSE

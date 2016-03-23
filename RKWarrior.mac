@@ -20,6 +20,8 @@ Sub Main
 	
 	/varset TankId ${Me.ID}
 	
+	/varset StickDistance 10
+	
 	/call AddToArray "CombatDiscs" "Dichotomic Shield"
 	/call AddToArray "CombatDiscs" "Shield Topple"
 	/call AddToArray "CombatDiscs" "Throat Jab"
@@ -89,9 +91,14 @@ Sub WarriorCombatActions
 	/call RKDisc "Cyclone Roar Rk. II"	
 	/if (${Me.PctAggro} < 100) /doability "Taunt"
 
-	/if (${Target.Distance} > 100) /autofire on
+	/if (${Target.Distance} > 30 && !${Me.AutoFire}) {
+		/autofire
+	}
 	
-	/if (${Me.XTarget} > 2) /call RKDisc "Pain Doesn't Hurt"
+	/if (${Me.XTarget} > 2) {
+		/call RKDisc "Pain Doesn't Hurt"
+		/if (${Me.CombatAbilityReady[Pain Doesn't Hurt]}) /return TRUE
+	}
 	
 	/if (${Me.XTarget} > 3 && ${Me.CombatAbilityReady[Wade In to Battle Rk. II]}) {
 		/call RKDisc "Wade In to Battle Rk. II"
@@ -100,7 +107,7 @@ Sub WarriorCombatActions
 
 	/if (${Target.Distance} < 50) /call RKDisc "Stormstrike Blades Rk. II"
 
-	/if (!${Me.Song[Field Guardian].ID}) /call RKDisc "Field Guardian"
+	/if (!${Me.Song[Field Protector Rk. II].ID}) /call RKDisc "Field Protector Rk. II"
 	/if (!${Me.Song[Commanding Voice].ID}) /call RKDisc "Commanding Voice"
 	
 	/if (!${Me.Underwater}) {
@@ -129,8 +136,8 @@ Sub WarriorCombatActions
 	/call RKAACast "War Stomp" ${CurrentTargetId}
 	/call RKAACast "Blast of Anger" ${CurrentTargetId}
   	/call RKAACast "Knee Strike" ${CurrentTargetId}
- 
-	/if (!${Target.Buff[${AltAbility[Call of Challenge].Spell.Name}].ID}) /call RKAACast "Call of Challenge" ${CurrentTargetId}
+
+	/if (${Target.ID} == ${CurrentTargetId} && !${Target.Buff[${AltAbility[Call of Challenge].Spell.Name}].ID}) /call RKAACast "Call of Challenge" ${CurrentTargetId}
  
  	/call RKAACast "Fundament: Third Spire of the Warlord" ${CurrentTargetId}
  	/call RKAACast "Gut Punch" ${CurrentTargetId}
@@ -140,7 +147,7 @@ Sub WarriorCombatActions
 	/call RKAACast "Warlord's Bravery"
  	/call RKAACast "Brace for Impact"
 	
-	/if (!${Bool[${Me.ActiveDisc}]}) /call RKDisc "Stout Defense"
+	/if (!${Bool[${Me.ActiveDisc}]}) /call RKDisc "Stout Defense Rk. II"
 
 /return FALSE
 
@@ -154,12 +161,13 @@ Sub WarriorBurn
 	
 	/if (${Bool[${Target.Casting}]}) /call RKDisc "Shield Reflect"
 
-	/call RKAACast "Wars Sheol's Heroic Blade"
-	/call RKAACast "Blade Guardian"
- 	/call RKAACast "Mark of the Mage Hunter"
- 	/call RKAACast "Warlord's Fury"	
- 	/call RKAACast "Projection of Fury"		
-	/call RKAACast "Rage of Rallos Zek"
+	/call RKDisc "Strike Through Rk. II"
+	/call RKAACast "Wars Sheol's Heroic Blade" ${CurrentTargetId}
+	/call RKAACast "Blade Guardian" ${CurrentTargetId}
+ 	/call RKAACast "Mark of the Mage Hunter" ${CurrentTargetId}
+ 	/call RKAACast "Warlord's Fury" ${CurrentTargetId}
+ 	/call RKAACast "Projection of Fury" ${CurrentTargetId}
+	/call RKAACast "Rage of Rallos Zek" ${CurrentTargetId}
 
 /return FALSE
 

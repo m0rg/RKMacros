@@ -8,6 +8,7 @@ Sub AddPullTargets
 	/if (${Zone.ShortName.Equal[brotherisland]}) {
 		/call AddToArray "PullTargets" "praetor"
 		/call AddToArray "PullTargets" "razorlatch"
+		/call AddToArray "PullTargets" "eyepecker"
 		/call AddToArray "PullTargets" "squawker"
 		/call AddToArray "PullTargets" "furthick"
 		/call AddToArray "PullTargets" "pounder"
@@ -31,8 +32,10 @@ Sub AddPullTargets
 		/call AddToArray "PullTargets" "tiny zombie"
 		/call AddToArray "PullTargets" "tsetsian"
 		/call AddToArray "PullTargets" "filthy"
-		/call AddToArray "PullTargets" "guard"
+		/call AddToArray "PullTargets" "hired guard"
 		/call AddToArray "PullTargets" "mosquito"
+		
+		/call AddToArray "PullTargets" "filthy scavenger"
 		
 		|Gribbles 2 - Scouting Ahead
 		/call AddToArray "PullTargets" "monstrosity"
@@ -41,7 +44,12 @@ Sub AddPullTargets
 		
 		/call AddToArray "PullTargets" "vegerog"
 		/call AddToArray "PullTargets" "excavator"			
-		
+		/call AddToArray "PullTargets" "xulous elder"	
+
+		|Gribbles 3 - Disrupting the ritual
+		/call AddToArray "PullTargets" "living ooze"	
+		/call AddToArray "PullTargets" "xulous ritualist"
+		/call AddToArray "PullTargets" "xulous warpriest"			
 	}
 
 	/if (${Zone.ShortName.Equal[ethernere_errand]}) {

@@ -19,6 +19,7 @@ Sub Init_RKBase
 	/next memberIndex
 	
 	/i quit	
+	/makecamp off
 	
 	|---------- BEHAVIOR ----------
 	/declare InCombatStickToCommander bool outer TRUE
@@ -40,9 +41,9 @@ Sub Init_RKBase
 	/declare UpperAggroThreshold int outer 80	
 	/declare TargetHpEngagePercentage int outer 99
 	/declare MaxTargetDistance int outer 5000
-	/declare MaxMeleeDistance int outer 14
+	/declare MaxMeleeDistance int outer 13
 	/declare StickTimer timer outer 10
-	/declare StickDistance string outer 7
+	/declare StickDistance string outer 9
 	/declare StickFlags string outer 
 	
 	/declare LowManaMed bool outer FALSE
@@ -358,7 +359,7 @@ Sub WillSelfBuffStack(string spellName)
 	/declare i int local
 	/for i 1 to 42
 		/if (${Me.Buff[${i}].ID} && !${Spell[${spellName}].WillStack[${Me.Buff[${i}]}]}) {
-			/if (${DebugMode}) /echo ${spellName} will not stack with ${Me.Buff[${i}].Name}
+			/if (${DebugMode}) /echo Self buff: ${spellName} will not stack with ${Me.Buff[${i}].Name}
 			/return FALSE
 		}
 	/next i
@@ -373,7 +374,7 @@ Sub WillBuffStack(string spellName, int targetId)
 	/declare i int local
 	/for i 1 to 42
 		/if (${Target.Buff[${i}].ID} && !${Spell[${spellName}].WillStack[${Target.Buff[${i}]}]}) {
-			/if (${DebugMode}) /echo ${spellName} will not stack with ${Target.Buff[${i}].Name}
+			/if (${DebugMode}) /echo Buff: ${spellName} will not stack with ${Target.Buff[${i}].Name} on Target Id: ${targetId}
 			/return FALSE
 		}
 	/next i

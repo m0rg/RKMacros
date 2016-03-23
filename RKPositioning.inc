@@ -224,7 +224,7 @@ Sub CheckCommanderFollow
 	/if (${BOTMode} == 1 || ${BOTMode} == 3) {
 		/if (${Me.XTarget} > 0) {
 		
-			/if (${InCombatStickToCommander} && ${Stick.Active}) {
+			/if (!${InCombatStickToCommander} && ${Stick.Active}) {
 				/if (${CurrentStickTargetId} == ${Group.Leader.ID}) {
 					/echo InCombatStickToCommander = true, dropping stick to commander
 					/stick off
@@ -240,7 +240,7 @@ Sub CheckCommanderFollow
 
 		/if (${Me.XTarget} > 0 && ${InCombatStickToCommander}) {
 			/if (!${Stick.Active}) {
-				/echo sticking to Commander ${RKCommander}
+				/if (${DebugMode}) /echo sticking to Commander ${RKCommander}
 				/call SetStickTarget ${Spawn[${RKCommander} pc].ID} ${StickDistance}
 			}
 		}

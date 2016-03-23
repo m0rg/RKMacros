@@ -22,7 +22,7 @@ Sub MeleeSubs
 	/if (${DebugMode}) /echo MeleeSubs
 	/if (!${MeleeMode}) /return FALSE
 	/if (!${Target.ID}) /return FALSE
-	/attack on
+	/if (${Target.Distance} < ${MaxMeleeDistance}) /attack on
 
 	/if (${Me.Haste} < 170 && !${Me.Buff[Resurrection Sickness].ID} && !${Bool[${Me.Hasted}]}) /cast item "Distillate of Alacrity X"
 
